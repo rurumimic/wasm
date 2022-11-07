@@ -7,9 +7,10 @@
 
 ```bash
 docker compose up -d
+# docker compose down -v
 ```
 
-### Usage
+### Test
 
 ```bash
 curl http://localhost:8080/init
@@ -39,7 +40,7 @@ curl http://localhost:8080/update_order -X POST -d @update_order.json
 ```
 
 ```bash
-curl http://localhost:8080/delete_order?id=2
+curl -X GET 'http://localhost:8080/delete_order?id=2'
 
 {"status":true}
 ```
@@ -52,34 +53,19 @@ curl http://localhost:8080/orders
 
 ---
 
-## Run a rust app in local
+## Run a wasm on Ubuntu
 
-### Install Rust
 
-1. Install Rust: [rustup](https://www.rust-lang.org/tools/install)
-2. Install WebAssembly target:
+### Run a MySQL
 
-```bash
-rustup target add wasm32-wasi
-```
-
-### Install WasmEdge
-
-- Install [Homebrew](https://brew.sh/)
-- Install Libs: `brew install llvm zlib pkg-config`
-- [WasmEdge Installation](https://wasmedge.org/book/en/quick_start/install.html)
 
 ```bash
-curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | bash
+docker compose -f mariadb.yml up -d
+# docker compose -f mariadb.yml down -v
 ```
 
-```bash
-wasmedge -v
 
-wasmedge version 0.11.2
-```
-
-### Run with wasm
+### Build wasm
 
 ```bash
 cargo build --target wasm32-wasi --release
@@ -97,7 +83,7 @@ target/wasm32-wasi/release/
 └── order_demo_service.wasm*
 ```
 
-Optimize:
+### Optimize wasm
 
 ```bash
 wasmedgec target/wasm32-wasi/release/order_demo_service.wasm order_demo_service.wasm
@@ -112,8 +98,10 @@ lld: warning: …/wasm/src/rust-mysql/order_demo_service.a0215eba7c.6fe52b4813.o
 [2022-11-04 13:56:46.372] [info] output start
 ```
 
-Run:
+### Run wasm
 
 ```bash
 wasmedge --env "DATABASE_URL=mysql://root:whalehello@localhost:3306/mysql" order_demo_service.wasm
 ```
+
+go to [Test](#test).
