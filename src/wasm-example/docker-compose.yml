@@ -1,0 +1,21 @@
+# ============================================
+# Docker Create/Destroy
+# --------------------------------------------
+# docker compose up -d
+# docker compose down -v
+# ============================================
+# Usage
+# --------------------------------------------
+# docker logs wasm-example
+# docker exec -it curl localhost:8080
+# ============================================
+version: "3.9"
+services:
+  wasm-example:
+    image: michaelirwin244/wasm-example
+    runtime: io.containerd.wasmedge.v1
+    platform: wasi/wasm32
+    container_name: wasm-example
+    hostname: wasm-example
+    ports:
+      - "8080:8080"
